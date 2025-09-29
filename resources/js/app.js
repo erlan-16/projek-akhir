@@ -10,16 +10,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
     
-    // Format number inputs
+    
     const numberInputs = document.querySelectorAll('input[type="number"]');
     numberInputs.forEach(input => {
         input.addEventListener('input', function() {
-            // Remove non-numeric characters except decimal point
             this.value = this.value.replace(/[^\d]/g, '');
         });
     });
     
-    // Confirmation for approve/reject actions
+    
     const confirmButtons = document.querySelectorAll('[data-confirm]');
     confirmButtons.forEach(button => {
         button.addEventListener('click', function(e) {
@@ -32,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Add loading state to forms
+
 document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', function() {
         const submitBtn = form.querySelector('button[type="submit"]');
@@ -40,7 +39,6 @@ document.querySelectorAll('form').forEach(form => {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Memproses...';
             
-            // Re-enable after 10 seconds as fallback
             setTimeout(() => {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = submitBtn.getAttribute('data-original-text') || 'Submit';

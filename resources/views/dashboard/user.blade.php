@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<!-- Statistics Cards -->
+
 <div class="row mb-4">
     <div class="col-md-4 mb-3">
         <div class="card border-0 shadow-sm h-100">
@@ -69,7 +69,7 @@
 </div>
 
 <div class="row">
-    <!-- Payment Form -->
+    
     <div class="col-lg-4 mb-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white py-3">
@@ -114,7 +114,7 @@
         </div>
     </div>
 
-    <!-- Payment History -->
+    
     <div class="col-lg-8 mb-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white py-3">
@@ -186,7 +186,6 @@
     </div>
 </div>
 
-<!-- Expenses -->
 <div class="row">
     <div class="col-12">
         <div class="card border-0 shadow-sm">

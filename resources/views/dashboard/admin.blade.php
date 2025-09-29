@@ -10,8 +10,6 @@
         <p class="text-muted">Kelola pembayaran kas kelas dan keuangan</p>
     </div>
 </div>
-
-<!-- Statistics Cards -->
 <div class="row mb-4">
     <div class="col-md-4 mb-3">
         <div class="card border-0 shadow-sm h-100">
@@ -69,7 +67,6 @@
 </div>
 
 <div class="row">
-    <!-- Pending Payments -->
     <div class="col-lg-8 mb-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white py-3">
@@ -138,8 +135,6 @@
             </div>
         </div>
     </div>
-
-    <!-- FORM TAMBAH TRANSAKSI (DIPERBAIKI) -->
     <div class="col-lg-4 mb-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white py-3">
@@ -149,7 +144,6 @@
                 </h5>
             </div>
             <div class="card-body">
-                <!-- Form Error Display -->
                 @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show">
                         <strong>Ada kesalahan:</strong>
@@ -247,7 +241,7 @@
                     </div>
                 </form>
 
-                <!-- Quick Add Templates -->
+                
                 <div class="mt-3">
                     <small class="text-muted fw-semibold">Template Cepat:</small>
                     <div class="d-flex gap-1 mt-2 flex-wrap">
@@ -273,7 +267,7 @@
     </div>
 </div>
 
-<!-- Recent Transactions -->
+
 <div class="row">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
@@ -356,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const amountPreview = document.getElementById('amount-preview');
     const submitBtn = document.getElementById('submitBtn');
     
-    // Format currency preview
+    
     amountInput.addEventListener('input', function() {
         const value = this.value;
         if (value && value > 0) {
@@ -367,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Change submit button based on transaction type
+    
     typeSelect.addEventListener('change', function() {
         const type = this.value;
         if (type === 'income') {
@@ -382,9 +376,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Form submission with loading state
     form.addEventListener('submit', function(e) {
-        // Validation
+        
         const type = typeSelect.value;
         const amount = amountInput.value;
         const description = document.getElementById('description').value;
@@ -401,11 +394,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
         
-        // Loading state
+        
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...';
         
-        // Re-enable after 10 seconds as fallback
+        
         setTimeout(() => {
             submitBtn.disabled = false;
             if (type === 'income') {
@@ -418,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 10000);
     });
     
-    // Quick template buttons
+    
     document.querySelectorAll('.template-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const type = this.dataset.type;
@@ -427,15 +420,14 @@ document.addEventListener('DOMContentLoaded', function() {
             typeSelect.value = type;
             document.getElementById('description').value = description;
             
-            // Trigger change event for styling
+            
             typeSelect.dispatchEvent(new Event('change'));
             
-            // Focus on amount input
             amountInput.focus();
         });
     });
     
-    // Reset form functionality
+   
     document.querySelector('button[type="reset"]').addEventListener('click', function() {
         amountPreview.innerHTML = '';
         submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Simpan Transaksi';

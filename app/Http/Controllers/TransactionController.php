@@ -10,12 +10,12 @@ class TransactionController extends Controller
 {
     public function store(Request $request)
     {
-        // Pastikan hanya admin yang bisa akses
+       
         if (!auth()->user()->isAdmin()) {
             return redirect()->back()->with('error', 'Akses ditolak. Hanya bendahara yang dapat menambah transaksi.');
         }
 
-        // Validasi input
+        
         $validator = Validator::make($request->all(), [
             'type' => 'required|in:income,expense',
             'amount' => 'required|numeric|min:1|max:100000000',
@@ -40,7 +40,7 @@ class TransactionController extends Controller
         }
 
         try {
-            // Simpan transaksi
+            
             $transaction = Transaction::create([
                 'type' => $request->type,
                 'amount' => $request->amount,
@@ -48,7 +48,7 @@ class TransactionController extends Controller
                 'created_by' => auth()->id(),
             ]);
 
-            // Message berdasarkan jenis transaksi
+           
             $type = $request->type === 'income' ? 'Pemasukan' : 'Pengeluaran';
             $message = $type . ' sebesar Rp ' . number_format($transaction->amount, 0, ',', '.') . ' berhasil ditambahkan.';
             

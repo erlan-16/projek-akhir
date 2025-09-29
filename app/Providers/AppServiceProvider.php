@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Share pending payments count to all views
+        
         View::composer('*', function ($view) {
             if (auth()->check() && auth()->user()->isAdmin()) {
                 $pendingPaymentsCount = Payment::where('status', 'pending')->count();

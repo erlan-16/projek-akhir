@@ -37,7 +37,6 @@ class PaymentController extends Controller
             'approved_by' => auth()->id(),
         ]);
 
-        // Create income transaction
         Transaction::create([
             'type' => 'income',
             'amount' => $payment->amount,

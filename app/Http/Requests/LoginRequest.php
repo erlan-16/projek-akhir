@@ -25,7 +25,7 @@ class LoginRequest extends FormRequest
     {
         if (! Auth::attempt($this->only('email', 'password'))) {
             throw ValidationException::withMessages([
-                'email' => __('Email atau password salah.'),
+                'email' => __('cek dulu bos'),
             ]);
         }
     }

@@ -17,10 +17,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    // User can make payments
+    
     Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
     
-    // Admin only routes
+    
     Route::middleware('admin')->group(function () {
         Route::post('/payments/{payment}/approve', [PaymentController::class, 'approve'])->name('payments.approve');
         Route::post('/payments/{payment}/reject', [PaymentController::class, 'reject'])->name('payments.reject');
