@@ -16,16 +16,16 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'nis'],
             'password' => ['required', 'string'],
         ];
     }
 
     public function authenticate(): void
     {
-        if (! Auth::attempt($this->only('email', 'password'))) {
+        if (! Auth::attempt($this->only('nis', 'password'))) {
             throw ValidationException::withMessages([
-                'email' => __('cek dulu bos'),
+                'nis' => __('cek dulu bos'),
             ]);
         }
     }
