@@ -11,7 +11,7 @@
     </div>
 </div>
 
-
+<!-- Statistics Cards -->
 <div class="row mb-4">
     <div class="col-md-4 mb-3">
         <div class="card border-0 shadow-sm h-100">
@@ -69,7 +69,7 @@
 </div>
 
 <div class="row">
-    
+    <!-- Payment Form -->
     <div class="col-lg-4 mb-4">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white py-3">
@@ -79,43 +79,197 @@
                 </h5>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('payments.store') }}">
+                <form method="POST" action="{{ route('payments.store') }}" id="paymentForm">
                     @csrf
+                    
                     <div class="mb-3">
-                        <label for="amount" class="form-label fw-semibold">Nominal Pembayaran</label>
+                        <label for="amount" class="form-label fw-semibold">Nominal Pembayaran *</label>
                         <div class="input-group">
                             <span class="input-group-text">Rp</span>
-                            <input type="number" class="form-control @error('amount') is-invalid @enderror" 
-                                   name="amount" id="amount" value="{{ old('amount') }}" 
-                                   placeholder="10000" min="1000" required>
+                            <input type="number" 
+                                   class="form-control @error('amount') is-invalid @enderror" 
+                                   name="amount" 
+                                   id="amount" 
+                                   value="{{ old('amount') }}" 
+                                   placeholder="0" 
+                                   min="1000" 
+                                   max="1000000"
+                                   required>
                         </div>
-                        <div class="form-text">Minimum pembayaran Rp 1.000</div>
                         @error('amount')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div id="amountPreview" class="mt-2"></div>
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label fw-semibold">Keterangan (Opsional)</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" 
-                                  name="description" id="description" rows="3" 
+                                  name="description" 
+                                  id="description" 
+                                  rows="3" 
                                   placeholder="Contoh: Kas bulan Januari">{{ old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-success w-100">
-                        <i class="fas fa-paper-plane me-2"></i>
-                        Kirim Pembayaran
-                    </button>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            Kirim Pembayaran
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
-    
-    <div class="col-lg-8 mb-4">
+    <!-- CAROUSEL PEMASUKAN -->
+    <div class="col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-success text-white py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="fas fa-arrow-up me-2"></i>
+                    Pemasukan Kelas
+                    @if($incomeTransactions->count() > 0)
+                        <span class="badge bg-light text-success ms-2">{{ $incomeTransactions->count() }}</span>
+                    @endif
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                @if($incomeTransactions->count() > 0)
+                    <div id="incomeCarouselUser" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            @foreach($incomeTransactions->take(10) as $index => $transaction)
+                            <button type="button" data-bs-target="#incomeCarouselUser" data-bs-slide-to="{{ $index }}" 
+                                    class="@if($index == 0) active @endif" aria-label="Slide {{ $index + 1 }}"></button>
+                            @endforeach
+                        </div>
+
+                        <div class="carousel-inner">
+                            @foreach($incomeTransactions->take(10) as $index => $transaction)
+                            <div class="carousel-item @if($index == 0) active @endif">
+                                <div class="p-4">
+                                    <h6 class="fw-bold text-success mb-2">
+                                        {{ $transaction->description }}
+                                    </h6>
+                                    <small class="text-muted d-block mb-3">
+                                        {{ $transaction->created_at->format('d M Y H:i') }}
+                                    </small>
+
+                                    <div class="border-top pt-3">
+                                        <div class="text-muted small mb-2">Nominal</div>
+                                        <div class="fs-5 fw-bold text-success">
+                                            Rp {{ number_format($transaction->amount, 0, ',', '.') }}
+                                        </div>
+                                    </div>
+
+                                    @if($transaction->payment)
+                                    <div class="mt-3 p-2 bg-light rounded">
+                                        <small class="text-muted">
+                                            <i class="fas fa-user me-1"></i>
+                                            Dari: <strong>{{ $transaction->payment->user->name }}</strong>
+                                        </small>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        @if($incomeTransactions->count() > 1)
+                        <button class="carousel-control-prev" type="button" data-bs-target="#incomeCarouselUser" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#incomeCarouselUser" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        </button>
+                        @endif
+                    </div>
+                @else
+                    <div class="text-center py-5">
+                        <i class="fas fa-inbox text-muted mb-3" style="font-size: 2rem;"></i>
+                        <p class="text-muted small">Belum ada pemasukan</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- CAROUSEL PENGELUARAN -->
+    <div class="col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-danger text-white py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="fas fa-arrow-down me-2"></i>
+                    Pengeluaran Kelas
+                    @if($expenseTransactions->count() > 0)
+                        <span class="badge bg-light text-danger ms-2">{{ $expenseTransactions->count() }}</span>
+                    @endif
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                @if($expenseTransactions->count() > 0)
+                    <div id="expenseCarouselUser" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            @foreach($expenseTransactions->take(10) as $index => $transaction)
+                            <button type="button" data-bs-target="#expenseCarouselUser" data-bs-slide-to="{{ $index }}" 
+                                    class="@if($index == 0) active @endif" aria-label="Slide {{ $index + 1 }}"></button>
+                            @endforeach
+                        </div>
+
+                        <div class="carousel-inner">
+                            @foreach($expenseTransactions->take(10) as $index => $transaction)
+                            <div class="carousel-item @if($index == 0) active @endif">
+                                <div class="p-4">
+                                    <h6 class="fw-bold text-danger mb-2">
+                                        {{ $transaction->description }}
+                                    </h6>
+                                    <small class="text-muted d-block mb-3">
+                                        {{ $transaction->created_at->format('d M Y H:i') }}
+                                    </small>
+
+                                    <div class="border-top pt-3">
+                                        <div class="text-muted small mb-2">Nominal</div>
+                                        <div class="fs-5 fw-bold text-danger">
+                                            Rp {{ number_format($transaction->amount, 0, ',', '.') }}
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <small class="text-muted">
+                                            Dicatat oleh: <strong>{{ $transaction->creator->name }}</strong>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        @if($expenseTransactions->count() > 1)
+                        <button class="carousel-control-prev" type="button" data-bs-target="#expenseCarouselUser" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#expenseCarouselUser" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        </button>
+                        @endif
+                    </div>
+                @else
+                    <div class="text-center py-5">
+                        <i class="fas fa-inbox text-muted mb-3" style="font-size: 2rem;"></i>
+                        <p class="text-muted small">Belum ada pengeluaran</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment History -->
+<div class="row">
+    <div class="col-12">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white py-3">
                 <h5 class="card-title mb-0 fw-bold">
@@ -164,11 +318,6 @@
                                     </td>
                                     <td>
                                         {{ $payment->description ?? '-' }}
-                                        @if($payment->approved_at)
-                                            <br><small class="text-muted">
-                                                Dikonfirmasi: {{ $payment->approved_at->format('d M Y H:i') }}
-                                            </small>
-                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
@@ -185,52 +334,23 @@
         </div>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-12">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white py-3">
-                <h5 class="card-title mb-0 fw-bold">
-                    <i class="fas fa-arrow-down text-danger me-2"></i>
-                    Riwayat Pengeluaran Kelas
-                </h5>
-            </div>
-            <div class="card-body">
-                @if($expenses->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Tanggal</th>
-                                    <th>Deskripsi</th>
-                                    <th>Nominal</th>
-                                    <th>Dicatat Oleh</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($expenses as $expense)
-                                <tr>
-                                    <td class="text-muted">
-                                        {{ $expense->created_at->format('d M Y H:i') }}
-                                    </td>
-                                    <td class="fw-semibold">{{ $expense->description }}</td>
-                                    <td class="fw-bold text-danger">
-                                        -Rp {{ number_format($expense->amount, 0, ',', '.') }}
-                                    </td>
-                                    <td class="text-muted">{{ $expense->creator->name }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                @else
-                    <div class="text-center py-4">
-                        <i class="fas fa-box text-muted mb-3" style="font-size: 3rem;"></i>
-                        <p class="text-muted">Belum ada pengeluaran yang dicatat</p>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const amountInput = document.getElementById('amount');
+    const amountPreview = document.getElementById('amountPreview');
+    
+    amountInput.addEventListener('input', function() {
+        const value = this.value;
+        if (value && value > 0) {
+            const formatted = 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+            amountPreview.innerHTML = `<div class="alert alert-success py-2 mb-0 small"><i class="fas fa-check me-1"></i><strong>${formatted}</strong></div>`;
+        } else {
+            amountPreview.innerHTML = '';
+        }
+    });
+});
+</script>
+@endpush
