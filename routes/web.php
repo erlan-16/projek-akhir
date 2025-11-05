@@ -14,6 +14,13 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard/ajax/user-transactions', [DashboardController::class, 'paginateUserTransactions'])->name('dashboard.ajax.user.transactions');
+    Route::get('/dashboard/ajax/user-payments', [DashboardController::class, 'paginateUserPayments'])->name('dashboard.ajax.user.payments');
+    Route::get('/dashboard/ajax/admin-transactions', [DashboardController::class, 'paginateAdminTransactions'])->name('dashboard.ajax.admin.transactions');
+    Route::get('/dashboard/ajax/admin-monthly', [DashboardController::class, 'paginateAdminMonthly'])->name('dashboard.ajax.admin.monthly');
+});
+
+Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
